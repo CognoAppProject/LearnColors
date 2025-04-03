@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Learn Color Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Instruction Modal -->
+    <div id="instruction-modal" class="modal">
+        <div class="modal-content">
+            <h2>Welcome to the Color Learning Game! 🎨</h2>
+            <p>How to play:</p>
+            <ol>
+                <li>Click on the correct color name.</li>
+                <li>The button will change to that color.</li>
+                <li>Each correct selection earns you 10 points.</li>
+                <li>Click all colors in the level to move to the next level.</li>
+                
+            </ol>
+            <button id="start-game-btn" class="primary-btn">Start Game</button>
+        </div>
+    </div>
+
+    
+
+    <div class="container">
+        <h1>Learn Colors 🎨</h1>
+        <h3>Click on the color name</h3>
+        <div class="game-content">
+            <div class="colors-container"></div>
+            <div class="buttons">
+                <button id="next-level" class="primary-btn hidden">Next Level</button>
+            </div>
+            <div class="score">Score: <span id="score">0</span></div>
+            <div id="congrats-msg" class="hidden">🎉 Congratulations! You completed all levels.</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
