@@ -33,7 +33,6 @@ function startNewLevel() {
     congratsMsg.style.display = 'none'; // Hide the message when starting a new level
 
     if (currentLevel > maxLevels) {
-        // Final congratulations message (only show once)
         clearInterval(timer); // Stop the timer once the game is completed
         congratsMsg.style.display = 'block';
         congratsMsg.innerHTML = `
@@ -41,6 +40,13 @@ function startNewLevel() {
             Time: ${timerDisplay.textContent}<br>
             Score: ${score}
         `;
+
+        // Submit result to Android
+        if (window.Android && Android.submitResult) {
+            Android.submitResult("Counting Game", score, timeElapsed);
+            console.log("Result submitted to Android:", score, timeElapsed);
+        }
+
         nextLevelButton.classList.add('hidden'); // Hide next button
         return;
     }
@@ -93,9 +99,16 @@ function checkLevelCompletion() {
             // Display congrats message after final level
             congratsMsg.style.display = 'block';
             congratsMsg.innerHTML = `
-                🎉 Congratulations! You completed all levels.<br>   
+                🎉 Congratulations! You completed all levels.<br>
             `;
             clearInterval(timer); // Stop the timer once the game is completed
+
+            // Submit result to Android
+            if (window.Android && Android.submitResult) {
+                Android.submitResult("Learn Colors", score, timeElapsed);
+                console.log("Result submitted to Android:", score, timeElapsed);
+            }
+
             nextLevelButton.classList.add('hidden'); // Hide next button
         } else {
             nextLevelButton.classList.remove('hidden');
