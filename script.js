@@ -28,7 +28,7 @@ startGameBtn.onclick = function() {
 // Start new level
 function startNewLevel() {
     selectedColors = [];
-    colorButtonsContainer.innerHTML = '';
+    colorButtonsContainer.innerHTML = ''; // Clear any previous buttons
     nextLevelButton.classList.add('hidden');
     congratsMsg.style.display = 'none'; // Hide the message when starting a new level
 
@@ -51,22 +51,27 @@ function startNewLevel() {
         return;
     }
 
+    // Create color buttons for the current level
     const levelColors = colors.slice(0, currentLevel + 2);
+    const fragment = document.createDocumentFragment(); // Use a fragment to avoid multiple reflows
+
     levelColors.forEach(color => {
         const button = document.createElement('button');
         button.classList.add('color-button');
         button.dataset.color = color;
         button.textContent = color.charAt(0).toUpperCase() + color.slice(1);
         button.addEventListener('click', () => selectColor(button, color));
-        colorButtonsContainer.appendChild(button);
+        fragment.appendChild(button);
     });
+
+    colorButtonsContainer.appendChild(fragment); // Append all buttons at once
 }
 
 // Handle color selection
 function selectColor(button, color) {
     if (!selectedColors.includes(color)) {
         selectedColors.push(color);
-        pronounceColor(color);
+        pronounceColor(color); // Speak the color
         button.style.backgroundColor = color;
         button.style.color = getContrastColor(color);
         updateScore();
@@ -74,11 +79,15 @@ function selectColor(button, color) {
     }
 }
 
-// Pronounce color name
+// Pronounce color name (avoid excessive calls)
+let lastPronouncedColor = '';
 function pronounceColor(color) {
-    const synth = window.speechSynthesis;
-    const utterance = new SpeechSynthesisUtterance(color);
-    synth.speak(utterance);
+    if (color !== lastPronouncedColor) {
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance(color);
+        synth.speak(utterance);
+        lastPronouncedColor = color;
+    }
 }
 
 // Get contrast color (black/white) based on background color
@@ -98,9 +107,7 @@ function checkLevelCompletion() {
         if (currentLevel >= maxLevels) {
             // Display congrats message after final level
             congratsMsg.style.display = 'block';
-            congratsMsg.innerHTML = `
-                🎉 Congratulations! You completed all levels.<br>
-            `;
+            congratsMsg.innerHTML = `🎉 Congratulations! You completed all levels.<br>`;
             clearInterval(timer); // Stop the timer once the game is completed
 
             // Submit result to Android
